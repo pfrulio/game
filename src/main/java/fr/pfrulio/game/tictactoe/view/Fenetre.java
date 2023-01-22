@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.plaf.DimensionUIResource;
 
@@ -23,14 +24,19 @@ public class Fenetre extends JFrame {
 
 	private int column;
 
-	public Fenetre() {
-		setTitle("Tic Tac Toe");
-		setSize(220, 220);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
+	private Case[][] grid;
 
-		Case[][] grid = new Case[3][3];
-		Controller controller = new Controller();
+	private Controller controller;
+
+	public Fenetre() {
+		this.setTitle("Tic Tac Toe");
+		this.setSize(220, 220);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+
+		this.grid = new Case[3][3];
+		this.controller = new Controller();
+
 		controller.init(grid);
 
 		for (int i = 0; i < 3; i++) {
@@ -41,19 +47,37 @@ public class Fenetre extends JFrame {
 				gridButton[i][j].setPreferredSize(new DimensionUIResource(50, 50));
 
 				gridButton[i][j].addActionListener(new ActionListener() {
-					@Override
 					public void actionPerformed(ActionEvent e) {
 						JButton btn = (JButton) e.getSource();
+						btn.setEnabled(false);
 						btn.setText(gamer.getDisplay());
 						setLine(line);
 						setColumn(column);
 						grid[line][column] = gamer;
-						if (controller.isFinish(grid))
-							dispose();
-						if (gamer == Case.ROND)
-							gamer = Case.CROIX;
-						else
-							gamer = Case.ROND;
+						if (controller.isFinish(grid)) {
+							int response = JOptionPane.showConfirmDialog(null, "Voulez-vous rejouer ?", "Rejouer",
+									JOptionPane.YES_NO_OPTION);
+							if (response == JOptionPane.NO_OPTION)
+								dispose();
+							else {
+								controller.init(grid);
+								for (int i = 0; i < 3; i++) {
+									for (int j = 0; j < 3; j++) {
+										gridButton[i][j].setText("");
+										gridButton[i][j].setEnabled(true);
+									}
+								}
+
+							}
+						} else {
+							if (gamer == Case.ROND) {
+								gamer = Case.CROIX;
+								playComputer();
+							} else
+								gamer = Case.ROND;
+
+						}
+
 					}
 				});
 				content.add(gridButton[i][j]);
@@ -83,4 +107,15 @@ public class Fenetre extends JFrame {
 		this.column = column;
 	}
 
+	private void playComputer() {
+		int line;
+		int column;
+		do {
+			line = controller.getNbAleatoire();
+			column = controller.getNbAleatoire();
+			System.out.println(line);
+			System.out.println(column);
+		} while (!gridButton[line][column].isEnabled());
+		gridButton[line][column].doClick();
+	}
 }

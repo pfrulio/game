@@ -8,7 +8,6 @@ public class Launch {
 		Fenetre fenetre = new Fenetre();
 	}
 
-	// TODO Faire une mini interface swing pour pouvoir jouer
 	// TODO Pouvoir jouer contre l'ordinateur (le faire commencer ou non)
 	// TODO Faire un apprentissage au fur et à mesure des partie
 	// TODO Pouvoir réinitialiser l'apprentissage (à force ça va être match nul tout

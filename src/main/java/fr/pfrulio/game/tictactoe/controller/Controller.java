@@ -45,7 +45,7 @@ public class Controller {
 			return true;
 		else if (grid[0][1].equals(player) && grid[1][1].equals(player) && grid[2][1].equals(player))
 			return true;
-		else if (grid[1][2].equals(player) && grid[1][2].equals(player) && grid[2][2].equals(player))
+		else if (grid[0][2].equals(player) && grid[1][2].equals(player) && grid[2][2].equals(player))
 			return true;
 		else if (grid[0][0].equals(player) && grid[1][1].equals(player) && grid[2][2].equals(player))
 			return true;
@@ -70,6 +70,11 @@ public class Controller {
 			}
 		}
 		return true;
+	}
+
+	public int getNbAleatoire() {
+		double d = Math.random() * 3;
+		return (int) d;
 	}
 
 }
